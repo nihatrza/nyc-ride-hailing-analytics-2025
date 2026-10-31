@@ -47,6 +47,24 @@ An end-to-end Enterprise Data Engineering & High-Performance Analytics pipeline 
 └─────────────────────────┘               └─────────────────────────┘
 ```
 
+### 🏗️ Data Architecture Lifecycle (Mermaid)
+
+The project follows a high-performance Enterprise Data Engineering and BI lifecycle:
+
+```mermaid
+graph LR
+A[Raw TLC Parquet Data] --> B(Python/Polars: Cleaning & Preprocessing)
+B --> C{DuckDB: OLAP Engine}
+C --> D[ETL: Fact Table]
+C --> E[ETL: Dimension Tables]
+D --> F((Power BI Data Model))
+E --> F
+F --> G[Advanced DAX & Business Logic]
+G --> H[Executive Dashboard]
+```
+
+*(Note: If viewing outside GitHub, the pipeline follows: Raw TLC Parquet ➔ Python/Polars Vectorized Processing ➔ DuckDB OLAP Staging ➔ Star Schema Construction ➔ Power BI Import ➔ DAX Modeling ➔ Executive Visualization)*
+
 ### Pipeline Workflow
 
 1. **Extraction:** Ingested multi-gigabyte raw TLC High-Volume For-Hire Vehicle (HVFHV) Parquet datasets.

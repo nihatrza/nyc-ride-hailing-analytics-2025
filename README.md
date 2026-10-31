@@ -1,211 +1,206 @@
-# 🚖 NYC Ride-Hailing Analytics (Uber vs. Lyft)
- 
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+# 🚖 NYC Ride-Hailing Data Engineering & Enterprise Analytics (243.5M+ Records)
+
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Data Warehouse](https://img.shields.io/badge/Star_Schema-Data_Warehouse-success?style=for-the-badge)
- 
-An end-to-end Data Analytics & Engineering project analyzing **20.57M+ clean ride-hailing trips** across New York City (Uber & Lyft). The project spans raw data ingestion, advanced PostgreSQL data warehousing (Star Schema), large-scale data deduplication, and an interactive 3-page executive Power BI dashboard.
- 
+![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)
+![Polars](https://img.shields.io/badge/Polars-CD7F32?style=for-the-badge&logo=polars&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![Star Schema](https://img.shields.io/badge/Star_Schema-Data_Warehouse-success?style=for-the-badge)
+
+An end-to-end Enterprise Data Engineering & High-Performance Analytics pipeline processing **243.5 Million+ ride-hailing trips** across New York City (Uber & Lyft) for the entire year of 2025. The project features an OLAP Data Warehouse built on DuckDB, high-speed dataframe processing via Polars, advanced SQL window functions, and an executive 3-page Power BI dashboard with a custom Dark-Theme UI.
+
 ---
- 
+
 ## 📌 Executive Summary
- 
-1. **Market Dominance:** Uber holds a commanding **~75% net revenue market share**, driven by high volume in Manhattan core corridors and airport hubs.
-2. **Data Integrity Restored:** Identified and removed **9.25M duplicate records** via SQL Window Functions, rectifying a ~45% artificial volume inflation and restoring absolute data accuracy (20.57M clean trips).
-3. **Geographic Bottlenecks:** Outer boroughs experience severe supply shortages, pushing average wait times up to **7.9 minutes in Queens** (Hammels/Arverne, JFK Airport) and **7.4 minutes in Staten Island**.
-4. **Economic Disparity:** Driver earnings drop significantly on weekends (**$18.51 avg pay** vs **$20.18 on weekdays**), accompanied by lower tip rates ($1.03 vs $1.20).
+
+1. **Massive Scale Efficiency:** Engineered an OLAP analytical engine using **DuckDB + Polars**, allowing sub-second analytical querying across 243.5M records without memory bottlenecks.
+2. **Market Dominance:** Uber holds a commanding **~74.5% gross revenue market share ($5.57B)**, outperforming Lyft ($1.97B) across all NYC boroughs and airport corridors.
+3. **Wait Time & Tipping Dynamics:** Drivers arriving under **2 minutes** receive tips on **24.21% of trips** ($1.64 avg tip). Waiting over 5 minutes causes tipping probability to drop sharply below 17.3%.
+4. **Airport Profitability Premium:** Airport Pickups yield **15.1% higher gross revenue** ($80.70 vs $70.11 on Uber) compared to dropoffs, making them the most lucrative routes for both platforms and drivers.
+5. **The Speed vs. Congestion Paradox:** Early morning hours (04:00–05:00) yield the highest hourly driver pay (**$76.16/hr**) due to high speed and zero congestion, whereas afternoon peak hours yield the highest pay per mile (**$4.80/mi**) but lower hourly earnings due to severe traffic.
+
 ---
 
-## 📊 Power BI Interactive Dashboard
- 
-### Dashboard Pages Architecture
- 
-**Page 1: Overview (Financial Performance & Market Share)**
-Focuses on market share breakdown between Uber and Lyft, net company profitability, and step-by-step revenue deduction via Waterfall Analysis.
-- Key Visuals: Market Share Clustered Bar, Net Revenue Donut, Profitability Breakdown Waterfall Chart, Daily Revenue Trend Line.
-![Executive Overview](assets/dashboard_overview.png)
+## 🔄 ETL Pipeline Architecture & Data Flow
 
-**Page 2: Operations (Spatial Demand & Wait Times)**
-Analyzes geographic concentration, airport demand, and operational bottlenecks across NYC boroughs and zones.
-- Key Visuals: Custom TopoJSON NYC Shape Map, Top Active Zones Bar Chart, Service Zone Breakdown, Demand & Wait Time Combo Chart.
-![Operational Dynamics](assets/dashboard_operations.png)
-
-**Page 3: Economics (Pricing & Driver Pay Behavior)**
-Examines econometric pricing drivers, distance vs. fare relationships, demand across time windows, and driver earnings stability.
-- Key Visuals: Distance vs. Fare Regression Scatter Plot, Revenue by Time Window, Weekday vs. Weekend Bar Chart, Daily Driver Pay Trend.
-![Econometric & Pricing Behavior](assets/dashboard_economics.png)
-
-
-### Dashboard UX Features
-- **Custom Theme:** Dark Slate (`#1E222D`) background with signature NYC Taxi Yellow (`#FFC107`) highlights.
-- **Seamless Navigation:** Custom transparent shape overlays for smooth 1-click page switching.
-- **Bookmark Actions:** 1-click "Reset All Slicers" button.
-- **External Links:** Embedded web actions routing directly to LinkedIn and GitHub repositories.
----
- 
-## 💡 Key Business Insights & Strategic Recommendations
- 
-### 1. Market Dynamics & Competition
-- **Insight:** Uber accounts for **74.95% of Net Revenue ($130.7M)** compared to Lyft's **25.05% ($43.7M)**. Lyft is heavily dependent on core Manhattan trips and struggles to capture market share in high-margin airport corridors.
-- **Recommendation:** Lyft should launch targeted promo pricing for airport rides (JFK/LaGuardia) to disrupt Uber's dominant hold on long-distance, high-fare routes.
-### 2. Operational Efficiency & Supply Allocation
-- **Insight:** Passengers in outer-borough zones (Queens, Staten Island, Bronx) face **30-50% longer wait times (6.7–7.9 min)** than Manhattan riders (4.2 min), despite strong demand volume (e.g., JFK Airport with 327K+ trips).
-- **Recommendation:** Implement **Zone-Based Driver Re-allocation Bonuses**. Offering a $3–$5 per-trip incentive for drivers entering high-wait zones (Queens/Staten Island) will rebalance fleet distribution and reduce churn from frustrated riders.
-### 3. Pricing Strategy & Revenue Optimization
-- **Insight:** The **Evening window (17:00–22:00)** generates the highest total volume (**5.88M trips, $147.4M revenue**), but **Afternoon trips (12:00–17:00)** yield the highest revenue per mile (**$5.96/mi**).
-- **Recommendation:** Fine-tune **Dynamic Surge Pricing** during the 12:00–17:00 window to maximize yield per mile, while optimizing dispatch algorithms during 17:00–22:00 peak hours to handle sheer trip volume efficiently.
-### 4. Driver Economics & Retention
-- **Insight:** Drivers earn **8.3% less per trip on weekends** ($18.51 vs $20.18) and receive **14% lower tips** ($1.03 vs $1.20), creating potential weekend supply deficits.
-- **Recommendation:** Restructure weekend commission tiers by lowering company take-rates by **2-3% on Friday/Saturday nights**. This will boost net driver take-home pay and incentivize higher driver availability during peak leisure hours.
----
- 
-## 🏗️ Architecture & Data Pipeline Workflow
- 
 ```text
-[ Raw TLC Data ] ──► [ Python Ingestion & Cleaning ] ──► [ PostgreSQL Data Warehouse ] ──► [ Power BI Dashboard ]
-                          (29.8M Records)                 (Star Schema & SQL Cleaning)           (3-Page Executive UI)
+┌─────────────────────────┐
+│ Raw TLC Parquet Files   │ (243.5M+ Raw Records)
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ Python ETL Engine       │ ──► Data Ingestion, Schema Enforcement,
+│ (Polars & DuckDB)       │     Batch Processing & Type Casting
+└────────────┬────────────┘
+             │
+             ▼
+┌─────────────────────────┐
+│ DuckDB OLAP Warehouse   │ ──► Dimensional Star Schema
+│ (nyc_ride_hailing.db)   │     (fact_trips, dim_company, dim_location, dim_date)
+└────────────┬────────────┘
+             │
+             ├─────────────────────────────────────────┐
+             ▼                                         ▼
+┌─────────────────────────┐               ┌─────────────────────────┐
+│ Advanced SQL Analytics  │               │ Power BI Visual Layer   │
+│ (Polars Analytics DF)   │               │ (DirectImport / OLAP)   │
+└─────────────────────────┘               └─────────────────────────┘
 ```
- 
-- **Extraction & Transformation (Python):** Processed TLC High-Volume For-Hire Vehicle (HVFHV) raw records.
-- **Data Warehousing (PostgreSQL):** Designed a dimensional Star Schema with `fact_trips` and supporting dimension tables (`dim_company`, `dim_zones`, `dim_date`).
-- **Data Integrity & Deduplication (SQL Window Functions):** Identified and eliminated 9,250,000 duplicate rows using PostgreSQL `ctid` and `ROW_NUMBER() OVER(PARTITION BY...)`, restoring true row-count to 20,569,277.
-- **Data Visualization (Power BI):** Engineered an executive 3-page interactive report with custom DAX measures, dynamic time windows, NYC Shape Map spatial integration, and UX-optimized navigation.
+
+### Pipeline Workflow
+
+1. **Extraction:** Ingested multi-gigabyte raw TLC High-Volume For-Hire Vehicle (HVFHV) Parquet datasets.
+2. **Transformation & Cleaning:** Leveraged **Polars** for fast vectorised operations, handling timestamp conversions, calculating wait times (`pickup - request`), speed (`miles / hour`), and derived financial margins.
+3. **Loading & Warehousing:** Modeled and populated an optimized **Star Schema Data Warehouse** inside **DuckDB** with indexing and read-only concurrency configuration.
+4. **Analytics Layer:** Executed high-performance SQL analytical queries for deep business insights and served aggregated models to **Power BI**.
+
 ---
- 
-## 🗄️ Database Schema (Star Schema)
- 
+
+## 🗄️ Data Warehouse Schema (Star Schema)
+
 ```text
                   ┌─────────────────┐
                   │   dim_company   │
                   ├─────────────────┤
-                  │ PK  license_num │
+                  │ PK  company_id  │
+                  │     company_name│
                   └────────┬────────┘
                            │ 1
                            │
                            │ N
-┌─────────────────┐       ┌┴───────────────────────────┐       ┌─────────────────┐
-│    dim_zones    │       │        fact_trips          │       │    dim_date     │
+┌─────────────────┐       ┌┴────────────────────────────┐       ┌─────────────────┐
+│   dim_location  │       │         fact_trips          │       │    dim_date     │
 ├─────────────────┤       ├─────────────────────────────┤       ├─────────────────┤
-│ PK  LocationID  │1─────N│ FK  hvfhs_license_num       │N─────1│ PK  date_key    │
-└─────────────────┘       │ FK  PULocationID            │       └─────────────────┘
-                          │ FK  DOLocationID            │
+│ PK  location_id │1─────N│ FK  company_id              │N─────1│ PK  date_key    │
+│     borough     │       │ FK  PULocationID            │       │     month_name  │
+│     zone        │       │ FK  DOLocationID            │       │     day_type    │
+│     service_zone│       │ FK  pickup_date_key         │       │     is_weekend  │
+└─────────────────┘       │     request_datetime        │       └─────────────────┘
                           │     pickup_datetime         │
+                          │     dropoff_datetime        │
                           │     trip_miles, trip_time   │
-                          │     base_passenger_fare     │
+                          │     total_gross_revenue     │
                           │     driver_pay, tips        │
                           │     company_margin          │
-                          │     wait_time_minutes       │
-                          └──────────────────────────────┘
+                          │     cbd_congestion_fee      │
+                          └─────────────────────────────┘
 ```
- 
+
 ---
- 
-## 🔍 Key Business Questions & SQL Analytics
- 
-### Query 1: Market Share & Net Revenue Margin
+
+## 📊 Power BI Dashboard Architecture
+
+The frontend is built as a **3-page Executive Power BI Report** optimized for dark mode (`#16191E`) with custom accent styling:
+
+* **Page 1: Overview (Financial Performance & Market Share):** Features KPI Blocks ($7.54B Revenue, 244M Trips), Market Share Clustered Bars, Net Revenue Share Donut, Monthly Revenue Trend, and Waterfall Margin Bridge.
+* **Page 2: Operations (Spatial Demand & Fleet Dynamics):** Displays Top Active Zones, Service Zone Distribution, Geographic Demand, and a Dual-Axis `Demand & Wait Time` combo chart by time window.
+* **Page 3: Economics (Pricing & Driver Economics):** Analyzes `Driver Pay Share %` by company, `Hourly Congestion Fee Revenue`, `Trip Distance vs. Fare` scatter plot with trendlines, and `Weekday vs. Weekend` earnings.
+
+---
+
+## 🔍 Deep-Dive Python & DuckDB SQL Queries
+
+### Query 1: Wait Time Impact on Passenger Tipping Behavior
+
+```python
+import duckdb
+
+con = duckdb.connect("nyc_ride_hailing_2025.duckdb", read_only=True)
+
+query_wait_vs_tip = """
+    SELECT
+        CASE
+            WHEN epoch(pickup_datetime - request_datetime) / 60.0 < 2 THEN '1. Under 2 min'
+            WHEN epoch(pickup_datetime - request_datetime) / 60.0 BETWEEN 2 AND 5 THEN '2. 2-5 min'
+            WHEN epoch(pickup_datetime - request_datetime) / 60.0 BETWEEN 5 AND 10 THEN '3. 5-10 min'
+            ELSE '4. Over 10 min'
+        END AS wait_time_bucket,
+        COUNT(*) AS total_trips,
+        ROUND(AVG(tips), 2) AS avg_tip_amount,
+        ROUND(SUM(CASE WHEN tips > 0 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS tip_percentage
+    FROM fact_trips
+    GROUP BY wait_time_bucket
+    ORDER BY wait_time_bucket;
+"""
+df_wait_tip = con.sql(query_wait_vs_tip).pl()
+print(df_wait_tip)
+```
+
+**Output & Insight:**
+
+| wait_time_bucket | total_trips | avg_tip_amount ($) | tip_percentage (%) |
+| --- | --- | --- | --- |
+| 1. Under 2 min | 27,634,391 | $1.64 | 24.21% |
+| 2. 2-5 min | 132,255,064 | $1.11 | 18.90% |
+| 3. 5-10 min | 68,756,510 | $1.14 | 17.23% |
+| 4. Over 10 min | 14,943,719 | $1.37 | 17.27% |
+
+📌 **Key Takeaway:** Keeping pickup wait times under 2 minutes dramatically increases tipping probability to **24.21%** ($1.64 avg). Tipping probability plateaus at ~17.2% once wait time exceeds 5 minutes.
+
+---
+
+### Query 2: Airport Trip Profitability Analysis (JFK & LaGuardia)
+
 ```sql
-SELECT 
-    c.company_name,
+SELECT
+    company_id,
+    CASE
+        WHEN PULocationID IN (132, 138) THEN 'Airport Pickup'
+        WHEN DOLocationID IN (132, 138) THEN 'Airport Dropoff'
+        ELSE 'Standard Trip'
+    END AS airport_trip_type,
     COUNT(*) AS total_trips,
-    ROUND(SUM(f.company_margin)::numeric, 2) AS total_net_margin,
-    ROUND((COUNT(*) * 100.0) / SUM(COUNT(*)) OVER(), 2) AS trip_market_share_pct
-FROM fact_trips f
-JOIN dim_company c ON f.hvfhs_license_num = c.license_num
-GROUP BY c.company_name
+    ROUND(AVG(total_gross_revenue), 2) AS avg_gross_revenue,
+    ROUND(AVG(company_margin), 2) AS avg_company_margin,
+    ROUND(AVG(driver_pay), 2) AS avg_driver_pay
+FROM fact_trips
+WHERE PULocationID IN (132, 138) OR DOLocationID IN (132, 138)
+GROUP BY company_id, airport_trip_type
 ORDER BY total_trips DESC;
 ```
- 
-**Query Output:**
- 
-| company_name | total_trips | total_net_margin ($) | trip_market_share_pct (%) |
-|---|---|---|---|
-| Uber | 15,418,291 | $130,700,000.00 | 74.95% |
-| Lyft | 5,150,986 | $43,700,000.00 | 25.05% |
- 
-📌 **Key Takeaway:** Uber dominates the NYC ride-hailing market with a 3:1 trip ratio over Lyft, capturing 74.95% ($130.7M) of net revenue. Lyft operates primarily as a secondary market player with 25.05% market share.
- 
-### Query 2: Operational Bottlenecks (Top Wait Time Zones)
-```sql
-SELECT 
-    z."Borough",
-    z."Zone",
-    COUNT(*) AS total_trips,
-    ROUND(AVG(f.wait_time_minutes)::numeric, 1) AS avg_wait_time_min
-FROM fact_trips f
-JOIN dim_zones z ON f."PULocationID" = z."LocationID"
-GROUP BY z."Borough", z."Zone"
-HAVING COUNT(*) > 10000
-ORDER BY avg_wait_time_min DESC
-LIMIT 5;
-```
- 
-**Query Output:**
- 
-| Borough | Zone | total_trips | avg_wait_time_min |
-|---|---|---|---|
-| Queens | Hammels/Arverne | 33,695 | 7.9 min |
-| Queens | JFK Airport | 327,686 | 7.9 min |
-| Queens | Far Rockaway | 47,286 | 7.8 min |
-| Queens | Rockaway Park | 13,156 | 7.5 min |
-| Staten Island | Grymes Hill/Clifton | 17,404 | 7.4 min |
- 
-📌 **Key Takeaway:** Outer borough zones suffer from critical driver supply deficits. Passengers at JFK Airport (327K+ trips) and Queens Rockaways face peak average wait times of 7.8–7.9 minutes, nearly double the Manhattan average (4.2 min).
- 
-### Query 3: Driver Pay & Tip Dynamics (Weekday vs. Weekend)
-```sql
-SELECT 
-    CASE WHEN d.is_weekend = TRUE THEN 'Weekend' ELSE 'Weekday' END AS day_type,
-    COUNT(*) AS total_trips,
-    ROUND(AVG(f.driver_pay)::numeric, 2) AS avg_driver_pay,
-    ROUND(AVG(f.tips)::numeric, 2) AS avg_tip_amount
-FROM fact_trips f
-JOIN dim_date d ON f.pickup_datetime::date = d.date_key
-GROUP BY d.is_weekend;
-```
- 
-**Query Output:**
- 
-| day_type | total_trips | avg_driver_pay ($) | avg_tip_amount ($) |
-|---|---|---|---|
-| Weekday | 14,340,177 | $20.18 | $1.20 |
-| Weekend | 6,229,100 | $18.51 | $1.03 |
- 
-📌 **Key Takeaway:** Drivers earn 8.3% less pay ($18.51 vs $20.18) and receive 14% lower tips ($1.03 vs $1.20) on weekends compared to weekdays. This indicates shorter average leisure trips and underscores the need for weekend incentives to maintain driver availability.
- 
-### Query 4: Revenue Efficiency by Time Window
-```sql
-SELECT 
-    CASE 
-        WHEN pickup_hour >= 6 AND pickup_hour < 12 THEN '1. Morning (06-12)'
-        WHEN pickup_hour >= 12 AND pickup_hour < 17 THEN '2. Afternoon (12-17)'
-        WHEN pickup_hour >= 17 AND pickup_hour < 22 THEN '3. Evening (17-22)'
-        ELSE '4. Night (22-06)' 
-    END AS time_window,
-    COUNT(*) AS total_trips,
-    ROUND(SUM(base_passenger_fare)::numeric, 2) AS total_revenue,
-    ROUND(SUM(base_passenger_fare)::numeric / NULLIF(SUM(trip_miles)::numeric, 0), 2) AS revenue_per_mile
-FROM fact_trips
-GROUP BY 1
-ORDER BY 1;
-```
- 
-**Query Output:**
- 
-| time_window | total_trips | total_revenue ($) | revenue_per_mile ($/mi) |
-|---|---|---|---|
-| 1. Morning (06-12) | 5,178,602 | $132,686,000.00 | $5.70 |
-| 2. Afternoon (12-17) | 4,957,277 | $130,007,000.00 | $5.96 |
-| 3. Evening (17-22) | 5,877,483 | $147,436,000.00 | $5.77 |
-| 4. Night (22-06) | 4,555,915 | $114,770,000.00 | $4.88 |
- 
-📌 **Key Takeaway:** The Evening window (17:00–22:00) is the primary volume driver (5.88M trips, $147.4M revenue). However, Afternoon trips (12:00–17:00) are the most monetarily efficient per unit distance ($5.96 revenue per mile).
- 
+
+**Output & Insight:**
+
+| company_id | airport_trip_type | total_trips | avg_gross_revenue ($) | avg_company_margin ($) | avg_driver_pay ($) |
+| --- | --- | --- | --- | --- | --- |
+| HV0003 (Uber) | Airport Dropoff | 7,511,410 | $70.11 | $19.01 | $40.66 |
+| HV0003 (Uber) | Airport Pickup | 6,515,668 | $80.70 | $18.38 | $49.67 |
+| HV0005 (Lyft) | Airport Dropoff | 2,744,378 | $62.49 | $13.60 | $38.67 |
+| HV0005 (Lyft) | Airport Pickup | 2,476,365 | $71.92 | $11.81 | $48.09 |
+
+📌 **Key Takeaway:** Airport Pickups generate **15.1% higher revenue** than dropoffs due to surge pricing and toll structures. Uber maintains a significantly higher net margin per trip ($18.38–$19.01) compared to Lyft ($11.81–$13.60).
+
 ---
- 
- 
+
+### Query 3: Driver Pay Efficiency (Hourly vs. Distance Efficiency)
+
+```sql
+SELECT
+    HOUR(pickup_datetime) AS pickup_hour,
+    COUNT(*) AS total_trips,
+    ROUND(AVG(driver_pay), 2) AS avg_driver_pay,
+    ROUND(SUM(driver_pay) / (SUM(epoch(dropoff_datetime - pickup_datetime)) / 3600.0), 2) AS driver_pay_per_hour_worked,
+    ROUND(SUM(driver_pay) / SUM(trip_miles), 2) AS driver_pay_per_mile
+FROM fact_trips
+GROUP BY pickup_hour
+ORDER BY driver_pay_per_hour_worked DESC;
+```
+
+**Output & Insight:**
+
+| pickup_hour | total_trips | avg_driver_pay ($) | driver_pay_per_hour_worked ($/hr) |
+| --- | --- | --- | --- |
+| 04:00 AM | 3,743,159 | $23.01 | $76.16 |
+| 05:00 AM | 4,446,709 | $23.13 | $73.76 |
+| 18:00 PM | 14,281,332 | $20.29 | $60.42 |
+| 17:00 PM | 13,816,750 | $21.43 | $58.67 |
+
+📌 **Key Takeaway:** Driving early in the morning (04:00–05:00) maximizes hourly earnings (**$76.16/hr**) due to high speed and zero congestion. In contrast, peak evening hours yield maximum pay per mile (**$4.80/mi**), but severe traffic drops hourly efficiency down to $58.67/hr.
+
+---
+
 ## 📁 Repository Structure
- 
+
 ```text
 nyc-ride-hailing-analytics/
 │
@@ -213,54 +208,55 @@ nyc-ride-hailing-analytics/
 │   ├── dashboard_overview.png
 │   ├── dashboard_operations.png
 │   ├── dashboard_economics.png
-│   └── erd_diagram.png
+│   └── architecture_diagram.png
 │
-├── sql/
-│   ├── 01_schema_definition.sql
-│   ├── 02_data_cleaning_deduplication.sql
-│   └── 03_business_analytics_queries.sql
-│
-├── python/
-│   ├── data_ingestion.py
-│   └── data_cleaning.py
+├── src/
+│   ├── etl_pipeline.py            # Polars & DuckDB data pipeline
+│   ├── data_warehouse_setup.py    # Schema generation & table population
+│   └── advanced_analytics.py      # Deep-dive DuckDB SQL analytical queries
 │
 ├── power_bi/
-│   ├── README.md                          # Drive links & instructions
-│   └── nyc_ride_hailing_dashboard.pbit    # Power BI Template File
+│   ├── README.md                  # Report documentation
+│   └── nyc_ride_hailing_2025.pbix # Complete Power BI Dashboard File
 │
 ├── .gitignore
 ├── LICENSE
 └── README.md
 ```
- 
+
 ---
- 
-## 💻 How to Run / Reproduce
- 
-**1. Clone the Repository**
-```bash
-git clone https://github.com/your-username/nyc-ride-hailing-analytics.git
-cd nyc-ride-hailing-analytics
-```
- 
-**2. Database Setup (PostgreSQL)**
-- Execute `sql/01_schema_definition.sql` to create database tables and primary/foreign keys.
-- Run your Python scripts in `python/` to ingest raw TLC CSV/Parquet files.
-- Execute `sql/02_data_cleaning_deduplication.sql` to clean the 9.25M duplicate records.
-- Run `sql/03_business_analytics_queries.sql` to verify numbers.
-**3. Open Power BI Dashboard**
-- Download the full `.pbix` file from the [Google Drive Link](#).
-- Or open `power_bi/nyc_ride_hailing_dashboard.pbit` and connect it to your local PostgreSQL instance.
+
+## 💻 How to Run
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/nihatrza/nyc-ride-hailing-analytics.git
+   cd nyc-ride-hailing-analytics
+   ```
+
+2. **Set Up Python Environment:**
+
+   ```bash
+   pip install duckdb polars
+   ```
+
+3. **Execute Analytics Script:**
+
+   ```bash
+   python src/advanced_analytics.py
+   ```
+
+4. **Open Power BI Dashboard:**
+   Open `power_bi/nyc_ride_hailing_2025.pbix` in Power BI Desktop to inspect measures, visuals, and interactive filters.
+
 ---
 
 ## 👤 Author
 
-**Nihat Rzaquluzade | Junior Data Analyst**
+**Nihat Rzaguluzada | Data Analyst & Engineer**
 
-This project was developed as a professional **Data Analytics portfolio project**, demonstrating skills in Python, PostgreSQL, ETL processes, data cleaning, SQL analysis, and Power BI data visualization.
-
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/nihatrza)
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nihat-rzaquluzade/)
-
-
+* **Education:** Information Technologies Undergraduate at Azerbaijan State University of Economics (UNEC)
+* **Certifications:** DataCamp Associate Data Analyst | freeCodeCamp Data Analysis with Python
+* **GitHub:** [github.com/nihatrza](https://github.com/nihatrza)
+* **LinkedIn:** [linkedin.com/in/nihat-rzaguluzade](https://www.linkedin.com/in/nihat-rzaguluzade/)

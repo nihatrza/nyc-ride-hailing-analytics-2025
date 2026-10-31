@@ -92,9 +92,23 @@ An end-to-end Enterprise Data Engineering & High-Performance Analytics pipeline 
 
 The frontend is built as a **3-page Executive Power BI Report** optimized for dark mode (`#16191E`) with custom accent styling:
 
-* **Page 1: Overview (Financial Performance & Market Share):** Features KPI Blocks ($7.54B Revenue, 244M Trips), Market Share Clustered Bars, Net Revenue Share Donut, Monthly Revenue Trend, and Waterfall Margin Bridge.
-* **Page 2: Operations (Spatial Demand & Fleet Dynamics):** Displays Top Active Zones, Service Zone Distribution, Geographic Demand, and a Dual-Axis `Demand & Wait Time` combo chart by time window.
-* **Page 3: Economics (Pricing & Driver Economics):** Analyzes `Driver Pay Share %` by company, `Hourly Congestion Fee Revenue`, `Trip Distance vs. Fare` scatter plot with trendlines, and `Weekday vs. Weekend` earnings.
+### Page 1: Overview (Financial Performance & Market Share)
+
+Features KPI Blocks ($7.54B Revenue, 244M Trips), Market Share Clustered Bars, Net Revenue Share Donut, Monthly Revenue Trend, and Waterfall Margin Bridge.
+
+![Page 1 - Overview](assets/page1_overview.png)
+
+### Page 2: Operations (Spatial Demand & Fleet Dynamics)
+
+Displays Top Active Zones, Service Zone Distribution, Geographic Demand, and a Dual-Axis `Demand & Wait Time` combo chart by time window.
+
+![Page 2 - Operations](assets/page2_operations.png)
+
+### Page 3: Economics (Pricing & Driver Economics)
+
+Analyzes `Driver Pay Share %` by company, `Hourly Congestion Fee Revenue`, `Trip Distance vs. Fare` scatter plot with trendlines, and `Weekday vs. Weekend` earnings.
+
+![Page 3 - Economics](assets/page3_economics.png)
 
 ---
 
@@ -278,10 +292,9 @@ con.close()
 nyc-ride-hailing-analytics/
 │
 ├── assets/
-│   ├── dashboard_overview.png
-│   ├── dashboard_operations.png
-│   ├── dashboard_economics.png
-│   └── architecture_diagram.png
+│   ├── page1_overview.png
+│   ├── page2_operations.png
+│   └── page3_economics.png
 │
 ├── src/
 │   ├── etl_pipeline.py            # Polars & DuckDB data pipeline

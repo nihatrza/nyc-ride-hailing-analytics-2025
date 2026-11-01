@@ -363,4 +363,4 @@ nyc-ride-hailing-analytics/
 * **Education:** Information Technologies Undergraduate at Azerbaijan State University of Economics (UNEC)
 * **Certifications:** DataCamp Associate Data Analyst | freeCodeCamp Data Analysis with Python
 * **GitHub:** [github.com/nihatrza](https://github.com/nihatrza)
-* **LinkedIn:** [linkedin.com/in/nihat-rzaguluzade](https://www.linkedin.com/in/nihat-rzaguluzade/)
+* **LinkedIn:** [linkedin.com/in/nihat-rzaguluzada](https://www.linkedin.com/in/nihat-rzaguluzade/)

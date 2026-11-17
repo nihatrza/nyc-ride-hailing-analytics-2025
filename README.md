@@ -1,142 +1,365 @@
-# 🚖 NYC Ride-Hailing Data Engineering & Enterprise Analytics (243.5M+ Records)
+<div align="center">
+
+# 🚖 NYC Ride-Hailing Data Engineering & Enterprise Analytics
+
+### 243.5M+ Trip Records · OLAP Data Warehouse · Executive BI Dashboard
+
+*From raw TLC Parquet files to an analytical warehouse and an executive dashboard: Python → Polars → DuckDB (Star Schema) → SQL Analytics → Power BI*
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![DuckDB](https://img.shields.io/badge/DuckDB-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)
-![Polars](https://img.shields.io/badge/Polars-CD7F32?style=for-the-badge&logo=polars&logoColor=white)
-![Power BI](https://img.shields.io/badge/Power_BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
+![DuckDB](https://img.shields.io/badge/DuckDB-OLAP-FFF000?style=for-the-badge&logo=duckdb&logoColor=black)
+![Polars](https://img.shields.io/badge/Polars-DataFrames-CD7F32?style=for-the-badge&logo=polars&logoColor=white)
+![Parquet](https://img.shields.io/badge/Apache%20Parquet-Source%20Data-50ABF1?style=for-the-badge&logo=apache&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power_BI-Dashboard-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
 ![Star Schema](https://img.shields.io/badge/Star_Schema-Data_Warehouse-success?style=for-the-badge)
 
-An end-to-end Enterprise Data Engineering & High-Performance Analytics pipeline processing **243.5 Million+ ride-hailing trips** across New York City (Uber & Lyft) for the entire year of 2025. The project features an OLAP Data Warehouse built on DuckDB, high-speed dataframe processing via Polars, advanced SQL window functions, and an executive 3-page Power BI dashboard with a custom Dark-Theme UI.
+![Records](https://img.shields.io/badge/records-243.5M+-success?style=flat-square)
+![Architecture](https://img.shields.io/badge/architecture-OLAP-blue?style=flat-square)
+![Data Processing](https://img.shields.io/badge/data%20processing-batch-orange?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
+
+[Overview](#-overview) •
+[Insights](#-key-business-insights) •
+[Architecture](#-system-architecture) •
+[Engineering](#-key-engineering-features) •
+[Warehouse](#-data-warehouse-schema) •
+[Dashboard](#-power-bi-dashboard) •
+[Analytics](#-deep-dive-analytics) •
+[Quick Start](#-quick-start)
+
+</div>
 
 ---
 
-## 📌 Executive Summary
+## 📑 Table of Contents
 
-1. **Massive Scale Efficiency:** Engineered an OLAP analytical engine using **DuckDB + Polars**, allowing sub-second analytical querying across 243.5M records without memory bottlenecks.
-2. **Market Dominance:** Uber holds a commanding **~74.5% gross revenue market share ($5.57B)**, outperforming Lyft ($1.97B) across all NYC boroughs and airport corridors.
-3. **Wait Time & Tipping Dynamics:** Drivers arriving under **2 minutes** receive tips on **24.21% of trips** ($1.64 avg tip). Waiting over 5 minutes causes tipping probability to drop sharply below 17.3%.
-4. **Airport Profitability Premium:** Airport Pickups yield **15.1% higher gross revenue** ($80.70 vs $70.11 on Uber) compared to dropoffs, making them the most lucrative routes for both platforms and drivers.
-5. **The Speed vs. Congestion Paradox:** Early morning hours (04:00–05:00) yield the highest hourly driver pay (**$76.16/hr**) due to high speed and zero congestion, whereas afternoon peak hours yield the highest pay per mile (**$4.80/mi**) but lower hourly earnings due to severe traffic.
-
----
-
-## 🔄 ETL Pipeline Architecture & Data Flow
-
-```text
-┌─────────────────────────┐
-│ Raw TLC Parquet Files   │ (243.5M+ Raw Records)
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│ Python ETL Engine       │ ──► Data Ingestion, Schema Enforcement,
-│ (Polars & DuckDB)       │     Batch Processing & Type Casting
-└────────────┬────────────┘
-             │
-             ▼
-┌─────────────────────────┐
-│ DuckDB OLAP Warehouse   │ ──► Dimensional Star Schema
-│ (nyc_ride_hailing.db)   │     (fact_trips, dim_company, dim_location, dim_date)
-└────────────┬────────────┘
-             │
-             ├─────────────────────────────────────────┐
-             ▼                                         ▼
-┌─────────────────────────┐               ┌─────────────────────────┐
-│ Advanced SQL Analytics  │               │ Power BI Visual Layer   │
-│ (Polars Analytics DF)   │               │ (DirectImport / OLAP)   │
-└─────────────────────────┘               └─────────────────────────┘
-```
-
-### 🏗️ Data Architecture Lifecycle (Mermaid)
-
-The project follows a high-performance Enterprise Data Engineering and BI lifecycle:
-
-```mermaid
-graph LR
-A[Raw TLC Parquet Data] --> B(Python/Polars: Cleaning & Preprocessing)
-B --> C{DuckDB: OLAP Engine}
-C --> D[ETL: Fact Table]
-C --> E[ETL: Dimension Tables]
-D --> F((Power BI Data Model))
-E --> F
-F --> G[Advanced DAX & Business Logic]
-G --> H[Executive Dashboard]
-```
-
-*(Note: If viewing outside GitHub, the pipeline follows: Raw TLC Parquet ➔ Python/Polars Vectorized Processing ➔ DuckDB OLAP Staging ➔ Star Schema Construction ➔ Power BI Import ➔ DAX Modeling ➔ Executive Visualization)*
-
-### Pipeline Workflow
-
-1. **Extraction:** Ingested multi-gigabyte raw TLC High-Volume For-Hire Vehicle (HVFHV) Parquet datasets.
-2. **Transformation & Cleaning:** Leveraged **Polars** for fast vectorised operations, handling timestamp conversions, calculating wait times (`pickup - request`), speed (`miles / hour`), and derived financial margins.
-3. **Loading & Warehousing:** Modeled and populated an optimized **Star Schema Data Warehouse** inside **DuckDB** with indexing and read-only concurrency configuration.
-4. **Analytics Layer:** Executed high-performance SQL analytical queries for deep business insights and served aggregated models to **Power BI**.
+- [Overview](#-overview)
+- [Project Highlights](#-project-highlights)
+- [Key Business Insights](#-key-business-insights)
+- [System Architecture](#-system-architecture)
+- [ETL Pipeline](#-etl-pipeline)
+- [Key Engineering Features](#-key-engineering-features)
+- [Data Warehouse Schema](#-data-warehouse-schema)
+- [Power BI Dashboard](#-power-bi-dashboard)
+- [Deep-Dive Analytics](#-deep-dive-analytics)
+- [Technology Stack](#-technology-stack)
+- [Quick Start](#-quick-start)
+- [Configuration](#-configuration)
+- [Repository Structure](#-repository-structure)
+- [Engineering Challenges](#-engineering-challenges--solutions)
+- [Roadmap](#-roadmap)
+- [Author](#-author)
 
 ---
 
-## 🗄️ Data Warehouse Schema (Star Schema)
+## 🎯 Overview
 
-```text
-                  ┌─────────────────┐
-                  │   dim_company   │
-                  ├─────────────────┤
-                  │ PK  company_id  │
-                  │     company_name│
-                  └────────┬────────┘
-                           │ 1
-                           │
-                           │ N
-┌─────────────────┐       ┌┴────────────────────────────┐       ┌─────────────────┐
-│   dim_location  │       │         fact_trips          │       │    dim_date     │
-├─────────────────┤       ├─────────────────────────────┤       ├─────────────────┤
-│ PK  location_id │1─────N│ FK  company_id              │N─────1│ PK  date_key    │
-│     borough     │       │ FK  PULocationID            │       │     month_name  │
-│     zone        │       │ FK  DOLocationID            │       │     day_type    │
-│     service_zone│       │ FK  pickup_date_key         │       │     is_weekend  │
-└─────────────────┘       │     request_datetime        │       └─────────────────┘
-                          │     pickup_datetime         │
-                          │     dropoff_datetime        │
-                          │     trip_miles, trip_time   │
-                          │     total_gross_revenue     │
-                          │     driver_pay, tips        │
-                          │     company_margin          │
-                          │     cbd_congestion_fee      │
-                          └─────────────────────────────┘
-```
+**NYC Ride-Hailing Data Engineering & Enterprise Analytics** is an end-to-end data engineering and analytics project that processes **243.5 Million+ High-Volume For-Hire Vehicle (HVFHV) trips** (Uber & Lyft) across New York City for the entire year of **2025**.
+
+The pipeline ingests raw **TLC Parquet datasets**, cleans and enriches them with **Polars**, and loads them into an **OLAP Data Warehouse** built on **DuckDB** using a dimensional **Star Schema**.
+
+Analytical insights are produced through two complementary layers:
+
+- **Advanced SQL Analytics:** DuckDB queries (window functions, aggregations, bucketing) executed from Python and returned as Polars dataframes.
+- **Power BI Executive Dashboard:** A 3-page report with a custom dark-theme UI for financial, operational, and driver-economics analysis.
+
+The project focuses not only on processing volume, but also on **query performance, dimensional modeling, business-oriented insights, and presentation quality**.
 
 ---
 
-## 📊 Power BI Dashboard Architecture
-
-The frontend is built as a **3-page Executive Power BI Report** optimized for dark mode (`#16191E`) with custom accent styling:
-
-### Page 1: Overview (Financial Performance & Market Share)
-
-Features KPI Blocks ($7.54B Revenue, 244M Trips), Market Share Clustered Bars, Net Revenue Share Donut, Monthly Revenue Trend, and Waterfall Margin Bridge.
+## 🎬 Dashboard Preview
 
 ![Page 1 - Overview](assets/page1_overview.png)
 
-### Page 2: Operations (Spatial Demand & Fleet Dynamics)
+---
 
-Displays Top Active Zones, Service Zone Distribution, Geographic Demand, and a Dual-Axis `Demand & Wait Time` combo chart by time window.
+## 📌 Project Highlights
+
+| Component | Implementation |
+|---|---|
+| Data Source | NYC TLC HVFHV Trip Records (Parquet) |
+| Time Coverage | Full year 2025 |
+| Scale | 243.5M+ trips |
+| Platforms Analyzed | Uber (HV0003) · Lyft (HV0005) |
+| Data Processing | Polars (vectorized transformations) |
+| Analytical Engine | DuckDB (OLAP) |
+| Data Model | Star Schema (`fact_trips` + 3 dimensions) |
+| Query Language | SQL (CASE bucketing, aggregations, joins, window functions) |
+| BI Layer | Power BI (3-page executive report) |
+| UI Theme | Custom dark mode (`#16191E`) |
+| Total Gross Revenue | $7.54B |
+
+### Main Capabilities
+
+- Sub-second analytical querying across 243.5M records.
+- Vectorized cleaning and feature engineering with Polars.
+- Read-only, indexed DuckDB warehouse configuration.
+- Dimensional modeling with a central fact table.
+- Wait-time, tipping, airport, driver-earnings, and borough analytics.
+- Executive KPI reporting with a dark-themed Power BI dashboard.
+
+---
+
+## 💡 Key Business Insights
+
+| # | Insight | Key Finding |
+|---|---|---|
+| 1 | **Market Dominance** | Uber holds **~74.5% gross revenue share ($5.57B)** vs. Lyft ($1.97B), across all NYC boroughs and airport corridors. |
+| 2 | **Wait Time & Tipping** | Pickups under **2 min** get tipped on **24.21%** of trips ($1.64 avg tip); beyond 5 min, tipping probability drops to **~17.2%**. |
+| 3 | **Airport Premium** | Airport pickups yield **15.1% higher gross revenue** ($80.70 vs. $70.11 on Uber) than dropoffs. |
+| 4 | **Speed vs. Congestion Paradox** | **04:00–05:00** gives the highest hourly driver pay (**$76.16/hr**); afternoon peaks give the highest pay per mile (**$4.80/mi**) but lower hourly earnings due to traffic. |
+| 5 | **Scale Efficiency** | DuckDB + Polars enables sub-second analytics over 243.5M records without memory bottlenecks. |
+
+---
+
+## 🏗️ System Architecture
+
+The platform follows a layered, warehouse-centric architecture in which DuckDB acts as the central analytical engine.
+
+```mermaid
+flowchart TD
+
+    A["📦 Raw TLC Parquet Files<br/>243.5M+ Records"]
+
+    B["🐍 Python ETL Engine<br/>Polars · Schema Enforcement · Type Casting"]
+
+    C[("DuckDB OLAP Warehouse<br/>nyc_ride_hailing_2025.duckdb")]
+
+    D["fact_trips"]
+    E["dim_company"]
+    F["dim_location"]
+    G["dim_date"]
+
+    H["Advanced SQL Analytics<br/>Polars DataFrames"]
+
+    I["Power BI Data Model<br/>DAX & Business Logic"]
+
+    J["📊 Executive Dashboard<br/>3 Pages · Dark Theme"]
+
+    A --> B
+    B --> C
+
+    C --> D
+    C --> E
+    C --> F
+    C --> G
+
+    D --> H
+    E --> H
+    F --> H
+    G --> H
+
+    D --> I
+    E --> I
+    F --> I
+    G --> I
+
+    I --> J
+```
+
+### Architecture Layers
+
+| Layer | Responsibility |
+|---|---|
+| Ingestion | Reads multi-gigabyte raw TLC HVFHV Parquet files |
+| Processing | Polars cleaning, timestamp conversion, derived metrics |
+| Storage | DuckDB OLAP warehouse with Star Schema |
+| Analytics | High-performance SQL queries over 243.5M+ rows |
+| Modeling | Power BI data model with DAX measures |
+| Presentation | 3-page executive dashboard |
+
+---
+
+## ⚙️ ETL Pipeline
+
+```mermaid
+flowchart LR
+
+    A([Start])
+
+    B["Extract<br/>TLC Parquet"]
+
+    C["Transform<br/>Polars"]
+
+    D["Load<br/>DuckDB Star Schema"]
+
+    E["Analyze<br/>SQL Queries"]
+
+    F["Visualize<br/>Power BI"]
+
+    G([Complete])
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    D --> F
+    E --> G
+    F --> G
+```
+
+### Pipeline Execution
+
+**1. Extraction**
+
+Ingested multi-gigabyte raw TLC High-Volume For-Hire Vehicle (HVFHV) Parquet datasets.
+
+**2. Transformation & Cleaning**
+
+Polars performs fast vectorized operations: timestamp conversions, wait-time calculation (`pickup - request`), speed (`miles / hour`), and derived financial margins.
+
+**3. Loading & Warehousing**
+
+An optimized **Star Schema** is modeled and populated inside DuckDB, with indexing and read-only concurrency configuration.
+
+**4. Analytics Layer**
+
+High-performance SQL queries produce business insights and serve aggregated models to Power BI.
+
+---
+
+## 🌟 Key Engineering Features
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### ⚡ Sub-Second OLAP Queries
+
+DuckDB's columnar, vectorized engine runs analytical queries across **243.5M+ records** without memory bottlenecks.
+
+</td>
+<td width="50%" valign="top">
+
+### 🧮 Vectorized Processing with Polars
+
+Polars handles timestamp parsing, wait-time and speed calculations, and margin derivation at scale before loading.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" valign="top">
+
+### 🧱 Dimensional Modeling
+
+A Star Schema (`fact_trips` + `dim_company`, `dim_location`, `dim_date`) separates measures from descriptive context for clean, fast analytics.
+
+</td>
+<td width="50%" valign="top">
+
+### 🔒 Read-Only Analytical Access
+
+The warehouse is opened with `read_only=True` for analytics, enabling safe concurrent query access.
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" valign="top">
+
+### 📈 Business-Oriented SQL
+
+Wait-time bucketing, airport trip classification, hourly driver-efficiency metrics, and borough market-share analysis.
+
+</td>
+<td width="50%" valign="top">
+
+### 🎨 Executive Dark-Theme BI
+
+A 3-page Power BI report with a custom dark UI (`#16191E`), KPI blocks, waterfall bridges, and dual-axis combo charts.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🗄️ Data Warehouse Schema
+
+```mermaid
+erDiagram
+    dim_company ||--o{ fact_trips : "company_id"
+    dim_location ||--o{ fact_trips : "PULocationID / DOLocationID"
+    dim_date ||--o{ fact_trips : "pickup_date_key"
+
+    dim_company {
+        string company_id PK
+        string company_name
+    }
+
+    dim_location {
+        int location_id PK
+        string borough
+        string zone
+        string service_zone
+    }
+
+    dim_date {
+        int date_key PK
+        string month_name
+        string day_type
+        boolean is_weekend
+    }
+
+    fact_trips {
+        string company_id FK
+        int PULocationID FK
+        int DOLocationID FK
+        int pickup_date_key FK
+        timestamp request_datetime
+        timestamp pickup_datetime
+        timestamp dropoff_datetime
+        float trip_miles
+        int trip_time
+        float total_gross_revenue
+        float driver_pay
+        float tips
+        float company_margin
+        float cbd_congestion_fee
+    }
+```
+
+### Table Overview
+
+| Table | Type | Description |
+|---|---|---|
+| `fact_trips` | Fact | One row per trip: timestamps, distance, revenue, driver pay, tips, margin, congestion fee |
+| `dim_company` | Dimension | Platform (Uber HV0003 / Lyft HV0005) |
+| `dim_location` | Dimension | Borough, zone, and service zone |
+| `dim_date` | Dimension | Month, day type, weekend flag |
+
+---
+
+## 📊 Power BI Dashboard
+
+The frontend is a **3-page Executive Power BI Report** optimized for dark mode (`#16191E`) with custom accent styling.
+
+### Page 1: Overview — Financial Performance & Market Share
+
+KPI blocks ($7.54B Revenue, 244M Trips), Market Share Clustered Bars, Net Revenue Share Donut, Monthly Revenue Trend, and Waterfall Margin Bridge.
+
+![Page 1 - Overview](assets/page1_overview.png)
+
+### Page 2: Operations — Spatial Demand & Fleet Dynamics
+
+Top Active Zones, Service Zone Distribution, Geographic Demand, and a Dual-Axis `Demand & Wait Time` combo chart by time window.
 
 ![Page 2 - Operations](assets/page2_operations.png)
 
-### Page 3: Economics (Pricing & Driver Economics)
+### Page 3: Economics — Pricing & Driver Economics
 
-Analyzes `Driver Pay Share %` by company, `Hourly Congestion Fee Revenue`, `Trip Distance vs. Fare` scatter plot with trendlines, and `Weekday vs. Weekend` earnings.
+`Driver Pay Share %` by company, `Hourly Congestion Fee Revenue`, `Trip Distance vs. Fare` scatter plot with trendlines, and `Weekday vs. Weekend` earnings.
 
 ![Page 3 - Economics](assets/page3_economics.png)
 
 ---
 
-## 🔍 Deep-Dive Python & DuckDB Analytics
+## 🔍 Deep-Dive Analytics
 
-The ad-hoc analytics module (`src/advanced_analytics.py`) executes high-performance analytical queries directly on the 243.5M+ record DuckDB OLAP engine using Polars dataframes.
+The analytics module (`src/advanced_analytics.py`) executes high-performance queries directly on the 243.5M+ record DuckDB warehouse and returns results as Polars dataframes.
 
----
-
-### Query 1: Wait Time Impact on Passenger Tipping Behavior
+### Query 1: Wait Time Impact on Passenger Tipping
 
 ```python
 import duckdb
@@ -165,20 +388,18 @@ print(df_wait_tip)
 con.close()
 ```
 
-**Query Output:**
-
 | wait_time_bucket | total_trips | avg_tip_amount ($) | tip_percentage (%) |
-| --- | --- | --- | --- |
+|---|---:|---:|---:|
 | 1. Under 2 min | 27,634,391 | $1.64 | 24.21% |
 | 2. 2-5 min | 132,255,064 | $1.11 | 18.90% |
 | 3. 5-10 min | 68,756,510 | $1.14 | 17.23% |
 | 4. Over 10 min | 14,943,719 | $1.37 | 17.27% |
 
-📌 **Business Takeaway:** Dispatch efficiency directly dictates gratuity behavior. Pickups executed under 2 minutes yield a peak **24.21%** tip probability ($1.64 average tip). Once wait times exceed 5 minutes, tipping rates drop and plateau at ~17.2%.
+> 📌 **Business Takeaway:** Dispatch efficiency directly drives gratuity behavior. Pickups under 2 minutes reach a peak **24.21%** tip probability ($1.64 average tip). Beyond 5 minutes, tipping rates drop and plateau at ~17.2%.
 
 ---
 
-### Query 2: Airport Trip Profitability Analysis (JFK & LaGuardia)
+### Query 2: Airport Trip Profitability (JFK & LaGuardia)
 
 ```python
 import duckdb
@@ -209,20 +430,18 @@ print(df_airports)
 con.close()
 ```
 
-**Query Output:**
-
 | company_id | airport_trip_type | total_trips | avg_gross_revenue ($) | avg_company_margin ($) | avg_driver_pay ($) |
-| --- | --- | --- | --- | --- | --- |
+|---|---|---:|---:|---:|---:|
 | HV0003 (Uber) | Airport Dropoff | 7,511,410 | $70.11 | $19.01 | $40.66 |
 | HV0003 (Uber) | Airport Pickup | 6,515,668 | $80.70 | $18.38 | $49.67 |
 | HV0005 (Lyft) | Airport Dropoff | 2,744,378 | $62.49 | $13.60 | $38.67 |
 | HV0005 (Lyft) | Airport Pickup | 2,476,365 | $71.92 | $11.81 | $48.09 |
 
-📌 **Business Takeaway:** Airport Pickups generate **15.1% higher gross revenue** than dropoffs due to demand surges and airport fees. Uber commands superior unit economics, retaining $18.38–$19.01 net margin per airport trip, whereas Lyft captures $11.81–$13.60.
+> 📌 **Business Takeaway:** Airport pickups generate **15.1% higher gross revenue** than dropoffs due to demand surges and airport fees. Uber commands superior unit economics ($18.38–$19.01 net margin per airport trip) versus Lyft ($11.81–$13.60).
 
 ---
 
-### Query 3: Driver Earnings & Efficiency Analysis (Speed vs. Congestion Paradox)
+### Query 3: Driver Earnings & Efficiency (Speed vs. Congestion Paradox)
 
 ```python
 import duckdb
@@ -247,17 +466,17 @@ print(df_driver_eff)
 con.close()
 ```
 
-**Query Output (Selected Windows):**
+**Selected windows:**
 
 | pickup_hour | total_trips | avg_driver_pay ($) | driver_pay_per_hour_worked ($/hr) |
-| --- | --- | --- | --- |
-| 04:00 AM | 3,743,159 | $23.01 | $76.16 |
-| 05:00 AM | 4,446,709 | $23.13 | $73.76 |
-| 03:00 AM | 3,540,262 | $20.48 | $71.46 |
-| 18:00 PM (Peak) | 14,281,332 | $20.29 | $60.42 |
-| 17:00 PM (Peak) | 13,816,750 | $21.43 | $58.67 |
+|---|---:|---:|---:|
+| 04:00 | 3,743,159 | $23.01 | $76.16 |
+| 05:00 | 4,446,709 | $23.13 | $73.76 |
+| 03:00 | 3,540,262 | $20.48 | $71.46 |
+| 18:00 (Peak) | 14,281,332 | $20.29 | $60.42 |
+| 17:00 (Peak) | 13,816,750 | $21.43 | $58.67 |
 
-📌 **Business Takeaway:** Early morning shifts (04:00–05:00 AM) offer maximum time efficiency (**$76.16/hr**) as clear roads allow drivers to cover more distance per hour. Peak evening hours yield the highest rate per distance (**$4.80/mi**), but severe Manhattan congestion reduces net hourly earnings down to ~$58.67/hr.
+> 📌 **Business Takeaway:** Early-morning shifts (04:00–05:00) maximize time efficiency (**$76.16/hr**) because clear roads let drivers cover more distance per hour. Peak hours yield the highest rate per distance (**$4.80/mi**), but Manhattan congestion reduces net hourly earnings to ~$58.67/hr.
 
 ---
 
@@ -287,20 +506,88 @@ print(df_borough_share)
 con.close()
 ```
 
-**Query Output:**
-
 | borough | company_id | total_trips | total_gross_revenue ($) | avg_trip_miles |
-| --- | --- | --- | --- | --- |
-| Bronx | HV0003 (Uber) | 23,680,225 | $491,180,000.00 | 4.40 mi |
-| Bronx | HV0005 (Lyft) | 7,725,806 | $162,950,000.00 | 4.14 mi |
-| Brooklyn | HV0003 (Uber) | 46,402,943 | $1,135,400,000.00 | 4.23 mi |
-| Brooklyn | HV0005 (Lyft) | 18,909,401 | $459,540,000.00 | 4.01 mi |
-| Queens | HV0003 (Uber) | 38,341,799 | $1,255,800,000.00 | 6.35 mi |
-| Queens | HV0005 (Lyft) | 14,549,653 | $454,930,000.00 | 6.13 mi |
-| Staten Island | HV0003 (Uber) | 2,927,924 | $71,005,000.00 | 5.43 mi |
-| Staten Island | HV0005 (Lyft) | 881,957 | $20,140,000.00 | 4.50 mi |
+|---|---|---:|---:|---:|
+| Bronx | HV0003 (Uber) | 23,680,225 | $491,180,000 | 4.40 mi |
+| Bronx | HV0005 (Lyft) | 7,725,806 | $162,950,000 | 4.14 mi |
+| Brooklyn | HV0003 (Uber) | 46,402,943 | $1,135,400,000 | 4.23 mi |
+| Brooklyn | HV0005 (Lyft) | 18,909,401 | $459,540,000 | 4.01 mi |
+| Queens | HV0003 (Uber) | 38,341,799 | $1,255,800,000 | 6.35 mi |
+| Queens | HV0005 (Lyft) | 14,549,653 | $454,930,000 | 6.13 mi |
+| Staten Island | HV0003 (Uber) | 2,927,924 | $71,005,000 | 5.43 mi |
+| Staten Island | HV0005 (Lyft) | 881,957 | $20,140,000 | 4.50 mi |
 
-📌 **Business Takeaway:** Uber maintains a consistent ~75% trip volume and revenue dominance across all 5 NYC boroughs. Queens represents the highest distance per trip (6.13–6.35 mi) due to airport logistics, making it the most revenue-dense borough outside Manhattan.
+> 📌 **Business Takeaway:** Uber maintains a consistent ~75% trip-volume and revenue dominance across all 5 NYC boroughs. Queens has the highest distance per trip (6.13–6.35 mi) due to airport logistics, making it the most revenue-dense borough outside Manhattan.
+
+---
+
+## 🧰 Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Programming Language | Python |
+| Data Source | NYC TLC HVFHV Parquet Datasets |
+| Data Processing | Polars |
+| Analytical Engine | DuckDB |
+| Data Model | Star Schema (OLAP) |
+| Query Language | SQL |
+| BI & Visualization | Power BI (DAX) |
+| UI Theme | Custom Dark Mode |
+| Version Control | Git / GitHub |
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python 3.10+
+- Git
+- Power BI Desktop (for the `.pbix` report)
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/nihatrza/nyc-ride-hailing-analytics.git
+
+cd nyc-ride-hailing-analytics
+```
+
+### 2. Set Up the Python Environment
+
+```bash
+python3 -m venv .venv
+
+source .venv/bin/activate
+
+pip install duckdb polars
+```
+
+### 3. Run the Analytics Script
+
+```bash
+python src/advanced_analytics.py
+```
+
+### 4. Open the Power BI Dashboard
+
+Open `power_bi/nyc_ride_hailing_2025.pbix` in Power BI Desktop to inspect measures, visuals, and interactive filters.
+
+> The raw TLC Parquet files and the generated DuckDB warehouse are large and are not committed to GitHub. Run the ETL scripts in `src/` to rebuild them locally.
+
+---
+
+## 🔧 Configuration
+
+| Configuration | Location | Description |
+|---|---|---|
+| ETL pipeline | `src/etl_pipeline.py` | Polars & DuckDB data pipeline |
+| Warehouse setup | `src/data_warehouse_setup.py` | Schema generation & table population |
+| Analytics | `src/advanced_analytics.py` | Deep-dive DuckDB SQL queries |
+| Warehouse file | `nyc_ride_hailing_2025.duckdb` | Generated DuckDB database |
+| Dashboard | `power_bi/nyc_ride_hailing_2025.pbix` | Power BI report |
+| Dashboard docs | `power_bi/README.md` | Report documentation |
+| Screenshots | `assets/` | Dashboard page previews |
 
 ---
 
@@ -321,7 +608,7 @@ nyc-ride-hailing-analytics/
 │
 ├── power_bi/
 │   ├── README.md                  # Report documentation
-│   └── nyc_ride_hailing_2025.pbix # Complete Power BI Dashboard File
+│   └── nyc_ride_hailing_2025.pbix # Complete Power BI dashboard file
 │
 ├── .gitignore
 ├── LICENSE
@@ -330,37 +617,55 @@ nyc-ride-hailing-analytics/
 
 ---
 
-## 💻 How to Run
+## 🧩 Engineering Challenges & Solutions
 
-1. **Clone the Repository:**
+| Challenge | Engineering Approach |
+|---|---|
+| Processing 243.5M+ records | Polars vectorized transformations |
+| Memory bottlenecks at scale | DuckDB columnar OLAP engine |
+| Fast analytical querying | Star Schema with indexing |
+| Safe concurrent analytics | Read-only DuckDB connections |
+| Wait-time & speed derivation | Computed during Polars transformation |
+| Business-ready reporting | Power BI data model with DAX measures |
+| Executive presentation quality | Custom 3-page dark-theme dashboard |
 
-   ```bash
-   git clone https://github.com/nihatrza/nyc-ride-hailing-analytics.git
-   cd nyc-ride-hailing-analytics
-   ```
+---
 
-2. **Set Up Python Environment:**
+## 🗺️ Roadmap
 
-   ```bash
-   pip install duckdb polars
-   ```
-
-3. **Execute Analytics Script:**
-
-   ```bash
-   python src/advanced_analytics.py
-   ```
-
-4. **Open Power BI Dashboard:**
-   Open `power_bi/nyc_ride_hailing_2025.pbix` in Power BI Desktop to inspect measures, visuals, and interactive filters.
+- [x] Raw TLC Parquet ingestion
+- [x] Polars cleaning & feature engineering
+- [x] DuckDB OLAP warehouse
+- [x] Star Schema (fact + dimensions)
+- [x] Advanced SQL analytics (4 deep-dive queries)
+- [x] 3-page Power BI executive dashboard
+- [x] GitHub repository and project documentation
+- [ ] Automated data quality checks
+- [ ] Automated integration testing
+- [ ] CI/CD with GitHub Actions
+- [ ] Interactive web dashboard (Streamlit)
 
 ---
 
 ## 👤 Author
 
-**Nihat Rzaguluzada | Data Analyst & Engineer**
+**Nihat Rzaguluzada**
 
-* **Education:** Information Technologies Undergraduate at Azerbaijan State University of Economics (UNEC)
-* **Certifications:** DataCamp Associate Data Analyst | freeCodeCamp Data Analysis with Python
-* **GitHub:** [github.com/nihatrza](https://github.com/nihatrza)
-* **LinkedIn:** [linkedin.com/in/nihat-rzaguluzada](https://www.linkedin.com/in/nihat-rzaguluzade/)
+Data Analyst & Engineer | Information Technologies Undergraduate
+
+- **Education:** Azerbaijan State University of Economics (UNEC)
+- **Certifications:** DataCamp Associate Data Analyst · freeCodeCamp Data Analysis with Python
+
+[![GitHub](https://img.shields.io/badge/GitHub-nihatrza-181717?style=for-the-badge&logo=github)](https://github.com/nihatrza)
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Nihat%20Rzaguluzada-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/nihat-rzaguluzade/)
+
+---
+
+<div align="center">
+
+**Built with Python, DuckDB, and a passion for Data Engineering.**
+
+⭐ If you find this project interesting, consider giving it a star!
+
+</div>

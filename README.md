@@ -1,4 +1,4 @@
-<div align="center">
+<div align="left">
 
 # 🚖 NYC Ride-Hailing Data Engineering & Enterprise Analytics
 
